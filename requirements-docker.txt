@@ -1,0 +1,4 @@
+# Smaller production image than installing matplotlib/fpdf2 (not used by current web routes).
+# When you add chart/PDF endpoints, add those packages here or use: pip install -r requirements.txt
+flask>=3.0.0,<4.0.0
+gunicorn>=22.0.0,<23.0.0

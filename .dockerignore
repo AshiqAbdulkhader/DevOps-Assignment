@@ -1,0 +1,32 @@
+# Git / CI
+.git
+.github
+
+# Local env and data
+.venv
+venv
+env
+.env
+.env.*
+*.db
+
+# Python noise
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.coverage
+htmlcov
+
+# Tests and dev-only deps (not needed in image)
+tests
+pytest.ini
+requirements-dev.txt
+
+# Reference desktop app (optional); remove this line to COPY it into the image
+Aceestver-3.2.4.py
+
+# Editor / OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db
