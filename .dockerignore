@@ -17,10 +17,8 @@ env
 .coverage
 htmlcov
 
-# Tests and dev-only deps (not needed in image)
-tests
-pytest.ini
-requirements-dev.txt
+# Tests and dev deps are excluded from the small *runtime* stage but must stay in
+# build context for the Dockerfile `ci-test` stage (GitHub Actions).
 
 # Reference desktop app (optional); remove this line to COPY it into the image
 Aceestver-3.2.4.py

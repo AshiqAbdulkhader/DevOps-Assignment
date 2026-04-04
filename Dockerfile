@@ -21,7 +21,29 @@ RUN pip install --upgrade pip setuptools wheel \
 # Drop .pyc files from the venv copy (slightly smaller layer)
 RUN find /venv -name "*.pyc" -delete
 
-# ---------- runtime: minimal attack surface, non-root ----------
+# ---------- CI: full app deps + pytest inside this container image ----------
+FROM python:${PYTHON_VERSION}-slim-bookworm AS ci-test
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /workspace
+
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
+
+COPY pytest.ini wsgi.py ./
+COPY aceest ./aceest/
+COPY tests ./tests/
+
+ENV PYTHONPATH=/workspace
+
+RUN pytest -q
+
+# ---------- runtime: minimal attack surface, non-root (default build target) ----------
 FROM python:${PYTHON_VERSION}-slim-bookworm AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
