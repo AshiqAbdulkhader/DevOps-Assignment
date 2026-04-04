@@ -4,15 +4,33 @@
 <div class="header" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
   <span>Clients</span>
   <nav class="header-nav">
+    <a href="{{ url_for('main.client_summary') }}">Summary</a>
     <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
     <a href="{{ url_for('main.logout') }}">Log out</a>
   </nav>
 </div>
 <div class="wrap-wide">
+  {% if current_client %}
+  <div class="card" style="margin-bottom:1.25rem; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem;">
+    <div>
+      <span style="color:var(--muted); font-size:0.9rem;">Current client</span>
+      <div style="font-weight:700; color:var(--accent);">{{ current_client }}</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+      <a class="btn btn-compact" href="{{ url_for('main.client_summary') }}">Open summary</a>
+      <form method="post" action="{{ url_for('main.clients') }}" style="margin:0;">
+        <input type="hidden" name="_action" value="clear">
+        <button type="submit" class="btn-compact" style="background:#444; color:var(--text);">Clear selection</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="card">
     <h2 style="margin:0 0 0.5rem; font-size:1.15rem; color:var(--accent);">Add client</h2>
     <p style="margin:0; color:var(--muted); font-size:0.95rem;">New clients are stored with membership status <strong>Active</strong>, matching the desktop app.</p>
     <form method="post" action="{{ url_for('main.clients') }}" style="margin-top:0.5rem;">
+      <input type="hidden" name="_action" value="add">
       <label for="name">Client name</label>
       <input id="name" name="name" type="text" autocomplete="off" required maxlength="200" placeholder="e.g. Jane Doe">
       <button type="submit">Add client</button>
@@ -24,13 +42,20 @@
     {% if clients %}
     <table class="data">
       <thead>
-        <tr><th>Name</th><th>Membership</th></tr>
+        <tr><th>Name</th><th>Membership</th><th style="width:7rem;"></th></tr>
       </thead>
       <tbody>
         {% for row in clients %}
         <tr>
-          <td>{{ row.name }}</td>
+          <td>{{ row.name }}{% if current_client == row.name %} <span style="color:var(--accent); font-size:0.85rem;">(current)</span>{% endif %}</td>
           <td>{{ row.membership_status or "—" }}</td>
+          <td>
+            <form method="post" action="{{ url_for('main.clients') }}" style="margin:0;">
+              <input type="hidden" name="_action" value="select">
+              <input type="hidden" name="name" value="{{ row.name }}">
+              <button type="submit" class="btn-compact">Select</button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

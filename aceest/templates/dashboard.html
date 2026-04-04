@@ -5,6 +5,7 @@
   <span>ACEest Dashboard ({{ role }})</span>
   <nav class="header-nav">
     <a href="{{ url_for('main.clients') }}">Clients</a>
+    <a href="{{ url_for('main.client_summary') }}">Summary</a>
     <a href="{{ url_for('main.logout') }}">Log out</a>
   </nav>
 </div>
@@ -12,10 +13,11 @@
   <div class="card">
     <p style="margin:0;">Signed in as <strong>{{ user }}</strong>.</p>
     <p style="margin:0.75rem 0 0; color: var(--muted); font-size: 0.95rem;">
-      Manage gym clients or continue with reports and workouts in later steps.
+      Pick a client on the Clients page, then open the summary (same flow as the desktop app).
     </p>
     <div class="toolbar">
       <a class="btn" href="{{ url_for('main.clients') }}">Manage clients</a>
+      <a class="btn" href="{{ url_for('main.client_summary') }}" style="margin-left:0.5rem;">Client summary</a>
     </div>
   </div>
 </div>

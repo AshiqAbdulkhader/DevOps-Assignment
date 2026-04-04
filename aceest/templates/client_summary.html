@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Client summary — ACEest{% endblock %}
+{% block body %}
+<div class="header" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+  <span>Client summary</span>
+  <nav class="header-nav">
+    <a href="{{ url_for('main.clients') }}">Clients</a>
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('main.logout') }}">Log out</a>
+  </nav>
+</div>
+<div class="wrap-wide">
+  <div class="card">
+    <p style="margin:0; color:var(--muted); font-size:0.95rem;">Selected client</p>
+    <h1 style="margin:0.25rem 0 1rem; font-size:1.35rem; color:var(--accent);">{{ name }}</h1>
+    <pre style="margin:0; padding:1rem; background:#0a0a0a; border:1px solid #333; border-radius:6px; font-size:0.95rem; line-height:1.5; white-space:pre-wrap;">Name: {{ name }}
+Program: {{ program or "—" }}
+Calories: {{ calories if calories is not none else "—" }}
+Membership: {{ membership or "—" }}
+Renewal date: {{ membership_end or "N/A" }}</pre>
+    <p style="margin:1rem 0 0; color:var(--muted); font-size:0.9rem;">Same fields as the desktop &ldquo;Client Summary&rdquo; tab.</p>
+  </div>
+</div>
+{% endblock %}
