@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — ACEest{% endblock %}
+{% block body %}
+<div class="header">ACEest Dashboard ({{ role }})</div>
+<div class="wrap">
+  <div class="card">
+    <p style="margin:0;">Signed in as <strong>{{ user }}</strong>.</p>
+    <p style="margin:0.75rem 0 0; color: var(--muted); font-size: 0.95rem;">
+      Client tools and reports will be added in the next steps.
+    </p>
+    <div class="toolbar">
+      <a class="btn" href="{{ url_for('main.logout') }}">Log out</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
