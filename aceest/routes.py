@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 from aceest.auth import login_required, safe_next_url
 from aceest.db import get_db
@@ -6,6 +6,7 @@ from aceest.db import get_db
 bp = Blueprint("main", __name__)
 
 _DASHBOARD = "main.dashboard"
+_CLIENTS = "main.clients"
 
 
 @bp.get("/")
@@ -61,3 +62,29 @@ def dashboard():
         user=session["user"],
         role=session.get("role", ""),
     )
+
+
+@bp.route("/clients", methods=["GET", "POST"])
+@login_required
+def clients():
+    db = get_db()
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        if not name:
+            flash("Client name is required.", "error")
+        else:
+            cur = db.execute(
+                "INSERT OR IGNORE INTO clients (name, membership_status) VALUES (?, ?)",
+                (name, "Active"),
+            )
+            db.commit()
+            if cur.rowcount:
+                flash(f"Client {name} saved.", "success")
+            else:
+                flash(f'A client named "{name}" already exists.', "error")
+        return redirect(url_for(_CLIENTS))
+
+    rows = db.execute(
+        "SELECT name, membership_status FROM clients ORDER BY name"
+    ).fetchall()
+    return render_template("clients.html", clients=rows)

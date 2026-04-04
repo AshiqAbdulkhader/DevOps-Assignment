@@ -1,15 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Dashboard — ACEest{% endblock %}
 {% block body %}
-<div class="header">ACEest Dashboard ({{ role }})</div>
+<div class="header" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+  <span>ACEest Dashboard ({{ role }})</span>
+  <nav class="header-nav">
+    <a href="{{ url_for('main.clients') }}">Clients</a>
+    <a href="{{ url_for('main.logout') }}">Log out</a>
+  </nav>
+</div>
 <div class="wrap">
   <div class="card">
     <p style="margin:0;">Signed in as <strong>{{ user }}</strong>.</p>
     <p style="margin:0.75rem 0 0; color: var(--muted); font-size: 0.95rem;">
-      Client tools and reports will be added in the next steps.
+      Manage gym clients or continue with reports and workouts in later steps.
     </p>
     <div class="toolbar">
-      <a class="btn" href="{{ url_for('main.logout') }}">Log out</a>
+      <a class="btn" href="{{ url_for('main.clients') }}">Manage clients</a>
     </div>
   </div>
 </div>

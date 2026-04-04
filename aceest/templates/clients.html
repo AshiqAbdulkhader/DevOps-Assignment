@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Clients — ACEest{% endblock %}
+{% block body %}
+<div class="header" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+  <span>Clients</span>
+  <nav class="header-nav">
+    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('main.logout') }}">Log out</a>
+  </nav>
+</div>
+<div class="wrap-wide">
+  <div class="card">
+    <h2 style="margin:0 0 0.5rem; font-size:1.15rem; color:var(--accent);">Add client</h2>
+    <p style="margin:0; color:var(--muted); font-size:0.95rem;">New clients are stored with membership status <strong>Active</strong>, matching the desktop app.</p>
+    <form method="post" action="{{ url_for('main.clients') }}" style="margin-top:0.5rem;">
+      <label for="name">Client name</label>
+      <input id="name" name="name" type="text" autocomplete="off" required maxlength="200" placeholder="e.g. Jane Doe">
+      <button type="submit">Add client</button>
+    </form>
+  </div>
+
+  <div class="card" style="margin-top:1.25rem;">
+    <h2 style="margin:0 0 0.5rem; font-size:1.15rem; color:var(--accent);">All clients</h2>
+    {% if clients %}
+    <table class="data">
+      <thead>
+        <tr><th>Name</th><th>Membership</th></tr>
+      </thead>
+      <tbody>
+        {% for row in clients %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td>{{ row.membership_status or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="margin:0.5rem 0 0; color:var(--muted);">No clients yet. Add one above.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
