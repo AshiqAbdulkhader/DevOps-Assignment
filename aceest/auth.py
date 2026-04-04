@@ -1,7 +1,7 @@
 from functools import wraps
 from typing import Optional
 
-from flask import redirect, request, session, url_for
+from flask import flash, redirect, request, session, url_for
 
 
 def safe_next_url(target: Optional[str]) -> Optional[str]:
@@ -15,6 +15,19 @@ def login_required(view):
     def wrapped(*args, **kwargs):
         if not session.get("user"):
             return redirect(url_for("main.login", next=request.path))
+        return view(*args, **kwargs)
+
+    return wrapped
+
+
+def client_required(view):
+    """Use after @login_required. Sends users to the client list if none is selected."""
+
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if not session.get("current_client"):
+            flash("Select a client first.", "error")
+            return redirect(url_for("main.clients"))
         return view(*args, **kwargs)
 
     return wrapped
