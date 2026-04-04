@@ -1,0 +1,6 @@
+# Web framework
+flask>=3.0.0,<4.0.0
+
+# Used by the original ACEest app (reports / charts); needed when porting features
+matplotlib>=3.8.0
+fpdf2>=2.7.0
