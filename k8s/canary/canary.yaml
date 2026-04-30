@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-canary
+  namespace: aceest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-canary
+      release: canary
+  template:
+    metadata:
+      labels:
+        app: aceest-canary
+        release: canary
+        version: v2
+    spec:
+      containers:
+        - name: aceest-fitness
+          image: docker.io/ashiqabdulkhader/aceest-fitness:v2
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: aceest-secret
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
