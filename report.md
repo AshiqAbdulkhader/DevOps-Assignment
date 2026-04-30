@@ -29,3 +29,5 @@ The first Kubernetes apply also hit a namespace timing race when applying a whol
 ## Automation Outcomes
 
 Pytest passed inside the container build stage with `19 passed`. The Docker Hub image was pushed with versioned tags, and the AKS deployment completed successfully. The live health endpoint returned `{"status":"healthy"}`.
+
+SonarQube was hosted locally using Docker at `http://localhost:9000`. The project key is `aceest-fitness`, and the local dashboard is available at `http://localhost:9000/dashboard?id=aceest-fitness`. The completed analysis returned quality gate status `OK`.
