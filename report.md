@@ -2,7 +2,7 @@
 
 ## Project And Deployment Details
 
-This project containerizes and deploys the ACEest Fitness Flask application using Docker, Docker Hub, GitHub Actions, SonarQube, and Azure Kubernetes Service.
+This project containerizes and deploys the ACEest Fitness Flask application using Docker, Docker Hub, GitHub Actions, local SonarQube analysis, and Azure Kubernetes Service.
 
 GitHub repository: `https://github.com/AshiqAbdulkhader/DevOps-Assignment`
 
@@ -62,14 +62,13 @@ The CD workflow performs these steps:
 
 1. Checkout source code from GitHub.
 2. Build the Docker `ci-test` stage, which runs the Pytest suite inside the container.
-3. Run the SonarQube scan using the project configuration in `sonar-project.properties`.
-4. Authenticate to Docker Hub using GitHub repository secrets.
-5. Build and push the production runtime image for `linux/amd64`, which matches the AKS node architecture.
-6. Authenticate to Azure using a service principal stored in GitHub secrets.
-7. Fetch AKS credentials with `az aks get-credentials`.
-8. Apply the Kubernetes namespace, secret, deployment, and service manifests.
-9. Update the Kubernetes deployment image tag.
-10. Wait for the rollout to complete using `kubectl rollout status`.
+3. Authenticate to Docker Hub using GitHub repository secrets.
+4. Build and push the production runtime image for `linux/amd64`, which matches the AKS node architecture.
+5. Authenticate to Azure using a service principal stored in GitHub secrets.
+6. Fetch AKS credentials with `az aks get-credentials`.
+7. Apply the Kubernetes namespace, secret, deployment, and service manifests.
+8. Update the Kubernetes deployment image tag.
+9. Wait for the rollout to complete using `kubectl rollout status`.
 
 The Azure service principal is used for deployment automation, which avoids using a personal Azure login in the pipeline.
 
@@ -140,7 +139,7 @@ Automated tests are written with Pytest under the `tests/` directory. The Docker
 
 `19 passed`
 
-SonarQube was hosted locally with Docker:
+SonarQube was hosted locally with Docker and run as a manual quality analysis step, separate from the GitHub Actions deployment pipeline:
 
 ```bash
 docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
@@ -164,7 +163,7 @@ The project now has a complete non-Jenkins DevOps path:
 - Docker Hub image publishing with versioned tags.
 - AKS deployment using Kubernetes manifests.
 - Service-principal based Azure deployment.
-- SonarQube static analysis with quality gate validation.
+- Local SonarQube static analysis with quality gate validation.
 - Multiple Kubernetes deployment strategies with rollback instructions.
 
 The live deployment is currently running in AKS with two healthy pods behind an Azure LoadBalancer.
@@ -177,4 +176,4 @@ The first Kubernetes apply also hit a namespace timing race when applying the wh
 
 Docker Hub authentication briefly rejected a public image pull for SonarQube because of stale local credentials. Logging out allowed Docker to pull the public SonarQube image anonymously.
 
-Local SonarQube works well for assignment evidence and screenshots, but GitHub Actions cannot access `localhost` on the developer laptop. For fully automated cloud-based quality gates, SonarCloud or a publicly reachable SonarQube server would be required.
+Local SonarQube works well for assignment evidence and screenshots. It was intentionally kept out of the GitHub Actions deployment workflow because GitHub-hosted runners cannot access `localhost` on the developer laptop. For fully automated cloud-based quality gates, SonarCloud or a publicly reachable SonarQube server would be required.

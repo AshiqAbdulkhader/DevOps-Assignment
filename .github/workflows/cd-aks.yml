@@ -17,8 +17,8 @@ env:
   AKS_CLUSTER: aks-aceest-devops
 
 jobs:
-  build-test-scan-push-deploy:
-    name: Build, test, scan, push, deploy
+  build-test-push-deploy:
+    name: Build, test, push, deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,12 +32,6 @@ jobs:
           target: ci-test
           push: false
           tags: aceest:ci-test
-
-      - name: SonarQube scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
